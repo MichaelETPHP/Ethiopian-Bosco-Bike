@@ -28,7 +28,7 @@ const Header: React.FC = () => {
         isScrolled
           ? 'bg-white/70 backdrop-blur-xl border border-white/30'
           : 'bg-white/10 backdrop-blur-2xl border border-white/20'
-      } text-white`}
+      }`}
       style={{
         WebkitBackdropFilter: 'blur(24px)',
         backdropFilter: 'blur(24px)',
@@ -41,7 +41,9 @@ const Header: React.FC = () => {
             <Zap className='w-6 h-6 text-black' />
           </div>
           <span
-            className={`text-2xl font-extrabold tracking-widest uppercase transition-colors duration-300 text-white`}
+            className={`text-2xl font-extrabold tracking-widest uppercase transition-colors duration-300 ${
+              isScrolled ? 'text-black' : 'text-white'
+            }`}
           >
             Bosco Bike
           </span>
@@ -49,27 +51,47 @@ const Header: React.FC = () => {
 
         {/* Desktop Nav */}
         <nav className='hidden md:flex items-center space-x-8 font-inter'>
-          {['hero', 'about', 'products'].map((section) => (
+          {['hero', 'about', 'products', 'contact'].map((section) => (
             <button
               key={section}
               onClick={() => scrollToSection(section)}
-              className={`relative capitalize font-semibold tracking-wide px-1 py-0.5 transition-colors duration-300 bg-transparent outline-none group text-white`}
+              className={`relative capitalize font-semibold tracking-wide px-1 py-0.5 transition-colors duration-300 bg-transparent outline-none group ${
+                isScrolled
+                  ? 'text-black hover:text-gray-700'
+                  : 'text-white hover:text-gray-200'
+              }`}
             >
-              {section === 'hero' ? 'Home' : section}
-              <span className='block h-0.5 bg-gradient-to-r from-white to-slate-400 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 rounded-full mt-1' />
+              {section === 'hero'
+                ? 'Home'
+                : section === 'contact'
+                ? 'Contact'
+                : section}
+              <span
+                className={`block h-0.5 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 rounded-full mt-1 ${
+                  isScrolled ? 'bg-black' : 'bg-white'
+                }`}
+              />
             </button>
           ))}
         </nav>
 
         {/* Mobile Menu Button */}
         <button
-          className='md:hidden p-2 rounded-lg bg-white/40 hover:bg-slate-200 transition-colors border border-slate-200'
+          className={`md:hidden p-2 rounded-lg transition-colors border ${
+            isScrolled
+              ? 'bg-white/80 hover:bg-white border-white'
+              : 'bg-white/40 hover:bg-white/60 border-white/40'
+          }`}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           {isMenuOpen ? (
-            <X className='w-7 h-7 text-white' />
+            <X
+              className={`w-7 h-7 ${isScrolled ? 'text-black' : 'text-white'}`}
+            />
           ) : (
-            <Menu className='w-7 h-7 text-white' />
+            <Menu
+              className={`w-7 h-7 ${isScrolled ? 'text-black' : 'text-white'}`}
+            />
           )}
         </button>
       </div>
@@ -82,27 +104,31 @@ const Header: React.FC = () => {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', stiffness: 260, damping: 30 }}
-            className='fixed top-0 right-0 w-4/5 max-w-xs h-screen bg-white/95 backdrop-blur-xl shadow-2xl z-50 border-l border-slate-200 flex flex-col'
+            className='fixed top-0 right-0 w-4/5 max-w-xs h-screen bg-white/95 backdrop-blur-xl shadow-2xl z-50 border-l border-gray-200 flex flex-col'
           >
-            <div className='flex items-center justify-between px-6 py-4 border-b border-slate-200'>
-              <span className='text-xl font-bold tracking-widest text-white'>
+            <div className='flex items-center justify-between px-6 py-4 border-b border-gray-200'>
+              <span className='text-xl font-bold tracking-widest text-black'>
                 Menu
               </span>
               <button
                 onClick={() => setIsMenuOpen(false)}
-                className='p-2 rounded-lg hover:bg-slate-100'
+                className='p-2 rounded-lg hover:bg-gray-100'
               >
-                <X className='w-6 h-6 text-white' />
+                <X className='w-6 h-6 text-black' />
               </button>
             </div>
             <nav className='flex flex-col gap-2 px-6 py-6'>
-              {['hero', 'about', 'products'].map((section) => (
+              {['hero', 'about', 'products', 'contact'].map((section) => (
                 <button
                   key={section}
                   onClick={() => scrollToSection(section)}
-                  className='text-lg font-semibold capitalize text-white hover:text-slate-200 transition-colors text-left py-2 px-2 rounded-lg hover:bg-slate-100'
+                  className='text-lg font-semibold capitalize text-black hover:text-gray-700 transition-colors text-left py-2 px-2 rounded-lg hover:bg-gray-100'
                 >
-                  {section === 'hero' ? 'Home' : section}
+                  {section === 'hero'
+                    ? 'Home'
+                    : section === 'contact'
+                    ? 'Contact'
+                    : section}
                 </button>
               ))}
             </nav>

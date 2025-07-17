@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
 import BuyNowModal from './BuyNowModal'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
+import { X } from 'lucide-react'
+import productsImage from '../assets/Products/Products.png'
 
 const Products: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null)
+  const [showImageModal, setShowImageModal] = useState(false)
 
   const products = [
     {
@@ -12,8 +15,7 @@ const Products: React.FC = () => {
       nickname: 'The Urban Explorer',
       description:
         'Powerful, stylish, and built for city commuting with premium features.',
-      image:
-        'https://v8fatbike.com/wp-content/uploads/2024/09/OUXI-Q8-600x600.jpg',
+      image: productsImage,
     },
     {
       id: 2,
@@ -21,8 +23,7 @@ const Products: React.FC = () => {
       nickname: 'The Mountain Conqueror',
       description:
         'Peak performance mountain e-bike with fat tires for any terrain.',
-      image:
-        'https://i5.walmartimages.com/seo/Gocio-Electric-Bike-Adults-Peak-1025W-Mountain-E-Bike-48V-13AH-Removable-Lithium-Ion-Battery-Ebikes-20-x4-0-Fat-Tire-Electric-Bicycles-3A-Fast-Charge_de351e88-90ed-40e1-be42-d2db0ef11202.7cd7395917d288d562e5c501829950ad.jpeg',
+      image: productsImage,
     },
     {
       id: 3,
@@ -30,8 +31,7 @@ const Products: React.FC = () => {
       nickname: 'The City Cruiser',
       description:
         'Sleek electric scooter perfect for urban commuting and style.',
-      image:
-        'https://komaki.in/wp-content/uploads/2025/04/XR1_right_front-1-1024x816.png',
+      image: productsImage,
     },
   ]
 
@@ -43,41 +43,53 @@ const Products: React.FC = () => {
     setSelectedProduct(null)
   }
 
+  const handleImageClick = () => {
+    setShowImageModal(true)
+  }
+
+  const closeImageModal = () => {
+    setShowImageModal(false)
+  }
+
   return (
     <>
       <section
         id='products'
         className='py-24 lg:py-36 bg-white flex items-center justify-center min-h-[80vh]'
       >
-        <motion.div
-          className='w-full max-w-6xl mx-auto text-center bg-white border border-black/10 backdrop-blur-xl rounded-3xl shadow-2xl px-4 sm:px-8 py-14 flex flex-col items-center'
-          initial={{ opacity: 0, y: 60 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 1 }}
-        >
-          <div className='flex flex-col items-center mb-8'>
-            <div className='w-16 h-16 rounded-full bg-gradient-to-tr from-black to-gray-400 flex items-center justify-center shadow-lg mb-4'>
-              <svg width='36' height='36' fill='none' viewBox='0 0 24 24'>
-                <path
-                  d='M7 17l5-5 5 5'
-                  stroke='#fff'
-                  strokeWidth='2'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                />
-                <circle cx='12' cy='12' r='10' stroke='#fff' strokeWidth='2' />
-              </svg>
+        <div className='w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'>
+          <div className='text-center mb-16'>
+            <div className='flex flex-col items-center mb-8'>
+              <div className='w-16 h-16 rounded-full bg-black flex items-center justify-center shadow-lg mb-4'>
+                <svg width='36' height='36' fill='none' viewBox='0 0 24 24'>
+                  <path
+                    d='M7 17l5-5 5 5'
+                    stroke='#fff'
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                  <circle
+                    cx='12'
+                    cy='12'
+                    r='10'
+                    stroke='#fff'
+                    strokeWidth='2'
+                  />
+                </svg>
+              </div>
+              <h2 className='text-4xl lg:text-5xl font-extrabold text-black mb-2 tracking-tight'>
+                Our Products
+              </h2>
+              <div className='w-20 h-1 bg-black rounded-full mb-4' />
             </div>
-            <h2 className='text-4xl lg:text-5xl font-extrabold text-black mb-2 tracking-tight'>
-              Our Products
-            </h2>
-            <div className='w-20 h-1 bg-gradient-to-r from-black to-gray-400 rounded-full mb-4' />
+            <p className='text-xl text-black max-w-3xl mx-auto leading-relaxed mb-12 font-medium'>
+              Discover our carefully curated selection of premium electric bikes
+              and scooters, designed to meet every rider's needs and
+              preferences.
+            </p>
           </div>
-          <p className='text-xl text-gray-800 max-w-3xl mx-auto leading-relaxed mb-12 font-medium'>
-            Discover our carefully curated selection of premium electric bikes
-            and scooters, designed to meet every rider's needs and preferences.
-          </p>
+
           <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
             {products.map((product) => (
               <motion.div
@@ -88,13 +100,22 @@ const Products: React.FC = () => {
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.7, delay: product.id * 0.1 }}
               >
-                <div className='relative overflow-hidden'>
+                <div
+                  className='relative overflow-hidden cursor-pointer'
+                  onClick={handleImageClick}
+                >
                   <img
                     src={product.image}
                     alt={product.name}
-                    className='w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700 grayscale'
+                    className='w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700'
                   />
-                  <div className='absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div>
+                  <div className='absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300 flex items-center justify-center'>
+                    <div className='opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full shadow-lg'>
+                      <span className='text-black font-semibold text-sm'>
+                        Click to zoom
+                      </span>
+                    </div>
+                  </div>
                 </div>
                 <div className='p-8'>
                   <div className='mb-4'>
@@ -110,7 +131,7 @@ const Products: React.FC = () => {
                   </p>
                   <button
                     onClick={() => handleBuyNow(product.name)}
-                    className='w-full bg-gradient-to-r from-black to-gray-700 hover:from-gray-900 hover:to-gray-700 text-white py-3 px-6 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl'
+                    className='w-full bg-black hover:bg-gray-800 text-white py-3 px-6 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl'
                   >
                     Buy Now
                   </button>
@@ -118,8 +139,42 @@ const Products: React.FC = () => {
               </motion.div>
             ))}
           </div>
-        </motion.div>
+        </div>
       </section>
+
+      {/* Image Modal */}
+      <AnimatePresence>
+        {showImageModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className='fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4'
+            onClick={closeImageModal}
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              className='relative max-w-7xl w-full max-h-[90vh]'
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={closeImageModal}
+                className='absolute -top-12 right-0 w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors duration-200 z-10'
+              >
+                <X className='w-6 h-6 text-white' />
+              </button>
+              <img
+                src={productsImage}
+                alt='Bosco Bike Products Showcase'
+                className='w-full h-auto max-h-[90vh] object-contain rounded-lg shadow-2xl'
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {selectedProduct && (
         <BuyNowModal productName={selectedProduct} onClose={closeModal} />
       )}
