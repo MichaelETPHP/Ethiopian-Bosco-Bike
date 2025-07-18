@@ -27,8 +27,8 @@ const Footer: React.FC = () => {
   }
 
   const handleWhatsAppClick = () => {
-    // WhatsApp chat URL with the Ethiopia phone number
-    const phoneNumber = '251931199939'
+    // WhatsApp chat URL with the China phone number
+    const phoneNumber = '8613812345678'
     const message =
       "Hello! I'm interested in your electric bikes and scooters. Can you help me?"
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
@@ -81,9 +81,13 @@ const Footer: React.FC = () => {
       <div className='container mx-auto px-4 sm:px-6 lg:px-8 py-16'>
         <div className='text-center'>
           {/* Brand */}
-          <div className='flex items-center justify-center space-x-3 mb-8'>
-            <div className='w-10 h-10 bg-white rounded-full flex items-center justify-center'>
-              <Zap className='w-6 h-6 text-black' />
+          <div className='flex flex-col items-center justify-center mb-8'>
+            <div className='w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-white mb-4'>
+              <img
+                src='/src/assets/logo-main.png'
+                alt='Bosco Bike Logo'
+                className='w-12 h-12 object-contain rounded-full'
+              />
             </div>
             <span className='text-2xl font-bold text-white'>Bosco Bike</span>
           </div>

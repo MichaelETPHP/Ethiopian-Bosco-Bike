@@ -13,60 +13,64 @@ import {
   Settings,
   Bike,
 } from 'lucide-react'
-import productsImage from '../assets/Products/Products.png'
+import pedalBikeVideo from '../assets/Products/1.mp4'
+import ebikeVideo from '../assets/Products/2.mp4'
 
 const Products: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null)
   const [showImageModal, setShowImageModal] = useState(false)
-  const [showSpecs, setShowSpecs] = useState(false)
+  const [expandedSpecs, setExpandedSpecs] = useState<{
+    [key: number]: boolean
+  }>({
+    1: false, // Bosco EBike - default closed
+    2: false, // Bosco Pedal Bike - default closed
+  })
+
+  // Debug function to log current state
+  const logAccordionState = (productId: number) => {
+    console.log(
+      `Current state for product ${productId}:`,
+      expandedSpecs[productId]
+    )
+    console.log('Full state object:', expandedSpecs)
+  }
 
   const products = [
     {
       id: 1,
-      name: 'OUXI Q8',
-      nickname: 'The Urban Explorer',
+      name: 'Bosco EBike',
+      nickname: 'ST 100',
       description:
-        'Powerful, stylish, and built for city commuting with premium features. Advanced battery technology with 80km range.',
-      price: '$1,299',
-      originalPrice: '$1,599',
+        'Premium electric bike with advanced battery technology and smart features. Perfect for urban commuting with 80km range and modern design.',
+      price: '$749',
+      originalPrice: '$899',
       rating: 4.8,
       reviews: 127,
-      image: productsImage,
+      video: ebikeVideo,
       features: ['80km Range', '25km/h Speed', 'Smart Display', 'LED Lights'],
       isFeatured: true,
-      badge: 'Best Seller',
+      badge: 'Electric',
       badgeColor: 'bg-black text-white',
     },
     {
       id: 2,
-      name: 'Gocio Electric Bike',
-      nickname: 'The Mountain Conqueror',
+      name: 'Bosco Pedal Bike',
+      nickname: 'ST 100',
       description:
-        'Peak performance mountain e-bike with fat tires for any terrain. Perfect for adventure seekers.',
-      price: '$1,899',
-      originalPrice: '$2,199',
+        'Classic pedal bike with premium components and comfortable design. Perfect for daily commuting and recreational riding.',
+      price: '$199',
+      originalPrice: '$249',
       rating: 4.9,
       reviews: 89,
-      image: productsImage,
-      features: ['100km Range', '45km/h Speed', 'Fat Tires', 'Suspension'],
-      isFeatured: false,
-      badge: 'New',
-      badgeColor: 'bg-black text-white',
-    },
-    {
-      id: 3,
-      name: 'Komaki XR1',
-      nickname: 'The City Cruiser',
-      description:
-        'Sleek electric scooter perfect for urban commuting and style. Compact design with premium finish.',
-      price: '$899',
-      originalPrice: '$1,099',
-      rating: 4.7,
-      reviews: 203,
-      image: productsImage,
-      features: ['60km Range', '35km/h Speed', 'Foldable', 'Portable'],
-      isFeatured: false,
-      badge: 'Popular',
+      video: pedalBikeVideo,
+      features: [
+        'Lightweight Frame',
+        '21-Speed Gears',
+        'Comfortable Saddle',
+        'Durable Tires',
+      ],
+      isFeatured: true,
+      badge: 'Classic',
       badgeColor: 'bg-black text-white',
     },
   ]
@@ -230,7 +234,7 @@ const Products: React.FC = () => {
             </motion.p>
           </div>
 
-          {/* Featured Product Section */}
+          {/* Featured Products Section */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -241,55 +245,89 @@ const Products: React.FC = () => {
             <div className='text-center mb-8'>
               <span className='inline-flex items-center px-4 py-2 bg-black text-white text-sm font-semibold rounded-full shadow-lg'>
                 <Star className='w-4 h-4 mr-2' />
-                Featured Product
+                Our Products
               </span>
             </div>
-            {(() => {
-              const featuredProduct = products.find((p) => p.isFeatured)
-              if (!featuredProduct) return null
 
-              return (
-                <div className='bg-white rounded-3xl shadow-2xl overflow-hidden border-2 border-black'>
-                  <div className='grid grid-cols-1 lg:grid-cols-2 gap-0'>
-                    {/* Product Image */}
+            {/* Products Grid */}
+            <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
+              {products.map((product, index) => (
+                <motion.div
+                  key={product.id}
+                  id={`product-card-${product.id}`}
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: index * 0.2 }}
+                  viewport={{ once: true }}
+                  className='bg-white rounded-3xl shadow-2xl overflow-hidden border-2 border-black hover:shadow-3xl hover:scale-[1.02] transition-all duration-500 group'
+                >
+                  <div className='grid grid-cols-1 lg:grid-cols-1 gap-0'>
+                    {/* Product Video */}
                     <div
-                      className='relative overflow-hidden group cursor-pointer'
+                      className='relative overflow-hidden group cursor-pointer bg-gradient-to-br from-gray-900 to-black'
                       onClick={handleImageClick}
                     >
-                      <img
-                        src={featuredProduct.image}
-                        alt={featuredProduct.name}
-                        className='w-full h-80 lg:h-full object-cover group-hover:scale-110 transition-transform duration-700'
-                      />
-                      <div className='absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
-                      <div className='absolute top-4 left-4'>
+                      {/* Video Container with Border */}
+                      <div className='relative w-full h-80 overflow-hidden rounded-t-3xl'>
+                        <video
+                          src={product.video}
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                          className='w-full h-full object-cover group-hover:scale-110 transition-all duration-700'
+                        />
+
+                        {/* Subtle Gradient Overlays - Only on edges */}
+                        <div className='absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-black/40 to-transparent pointer-events-none' />
+                        <div className='absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/40 to-transparent pointer-events-none' />
+                        <div className='absolute top-0 left-0 bottom-0 w-16 bg-gradient-to-r from-black/30 to-transparent pointer-events-none' />
+                        <div className='absolute top-0 right-0 bottom-0 w-16 bg-gradient-to-l from-black/30 to-transparent pointer-events-none' />
+                      </div>
+
+                      {/* Floating Badge */}
+                      <div className='absolute top-6 left-6 z-10'>
                         <span
-                          className={`inline-flex items-center px-3 py-1 text-white text-xs font-semibold rounded-full shadow-lg ${featuredProduct.badgeColor}`}
+                          className={`inline-flex items-center px-4 py-2 text-white text-sm font-bold rounded-full shadow-2xl backdrop-blur-sm border border-white/20 ${product.badgeColor}`}
                         >
-                          {featuredProduct.badge}
+                          <span className='mr-2'>⚡</span>
+                          {product.badge}
                         </span>
                       </div>
-                      <div className='absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300'>
-                        <div className='bg-white/95 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-black/10'>
-                          <span className='text-black font-semibold text-sm flex items-center'>
-                            <ZoomIn className='w-4 h-4 mr-2' />
-                            Click to zoom
+
+                      {/* Play Button Overlay */}
+                      <div className='absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300'>
+                        <div className='bg-white/95 backdrop-blur-md px-6 py-3 rounded-full shadow-2xl border border-white/50 transform scale-90 group-hover:scale-100 transition-transform duration-300'>
+                          <span className='text-black font-bold text-sm flex items-center'>
+                            <ZoomIn className='w-5 h-5 mr-2' />
+                            Click to View
                           </span>
                         </div>
                       </div>
+
+                      {/* Corner Accent */}
+                      <div className='absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-transparent via-white/10 to-transparent rounded-bl-full pointer-events-none' />
+
+                      {/* Bottom Glow Effect */}
+                      <div className='absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/30 to-transparent' />
                     </div>
 
                     {/* Product Details */}
-                    <div className='p-8 lg:p-12 flex flex-col justify-center bg-gradient-to-br from-gray-50 to-white'>
+                    <div className='p-8 flex flex-col justify-center bg-gradient-to-br from-gray-50 to-white relative overflow-hidden'>
+                      {/* Background Pattern */}
+                      <div className='absolute inset-0 opacity-5'>
+                        <div className='absolute top-0 right-0 w-32 h-32 bg-black rounded-full -translate-y-16 translate-x-16' />
+                        <div className='absolute bottom-0 left-0 w-24 h-24 bg-black rounded-full translate-y-12 -translate-x-12' />
+                      </div>
                       <div className='mb-6'>
-                        <h3 className='text-3xl lg:text-4xl font-bold text-black mb-2'>
-                          {featuredProduct.name}
+                        <h3 className='text-3xl font-bold text-black mb-2'>
+                          {product.name}
                         </h3>
                         <p className='text-xl text-gray-700 font-semibold mb-4'>
-                          {featuredProduct.nickname}
+                          {product.nickname}
                         </p>
                         <p className='text-gray-600 leading-relaxed mb-6'>
-                          {featuredProduct.description}
+                          {product.description}
                         </p>
                       </div>
 
@@ -300,7 +338,7 @@ const Products: React.FC = () => {
                             <Star
                               key={i}
                               className={`w-5 h-5 ${
-                                i < Math.floor(featuredProduct.rating!)
+                                i < Math.floor(product.rating!)
                                   ? 'text-black fill-current'
                                   : 'text-gray-300'
                               }`}
@@ -308,14 +346,13 @@ const Products: React.FC = () => {
                           ))}
                         </div>
                         <span className='text-gray-600 font-medium'>
-                          {featuredProduct.rating} ({featuredProduct.reviews}{' '}
-                          reviews)
+                          {product.rating} ({product.reviews} reviews)
                         </span>
                       </div>
 
                       {/* Features */}
                       <div className='grid grid-cols-2 gap-3 mb-8'>
-                        {featuredProduct.features.map((feature, index) => (
+                        {product.features.map((feature, index) => (
                           <div
                             key={index}
                             className='flex items-center text-sm text-gray-600'
@@ -327,106 +364,258 @@ const Products: React.FC = () => {
                       </div>
 
                       {/* Price */}
-                      <div className='flex items-center mb-8'>
-                        <span className='text-4xl font-bold text-black mr-4'>
-                          {featuredProduct.price}
+                      <div className='flex items-center mb-6'>
+                        <span className='text-3xl font-bold text-black mr-3'>
+                          {product.price}
                         </span>
-                        {featuredProduct.originalPrice && (
+                        {product.originalPrice && (
                           <span className='text-xl text-gray-400 line-through'>
-                            {featuredProduct.originalPrice}
+                            {product.originalPrice}
                           </span>
                         )}
                       </div>
 
-                      {/* Action Buttons */}
-                      <div className='flex flex-col sm:flex-row gap-4 mb-8'>
+                      {/* Action Button */}
+                      <div className='flex justify-start mb-8'>
                         <motion.button
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
-                          onClick={() => handleBuyNow(featuredProduct.name)}
-                          className='flex-1 bg-black hover:bg-gray-800 text-white py-4 px-8 rounded-xl font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center'
+                          onClick={() => handleBuyNow(product.name)}
+                          className='bg-black hover:bg-gray-800 text-white py-4 px-8 rounded-xl font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center'
                         >
                           Buy Now
                           <ArrowRight className='w-5 h-5 ml-2' />
                         </motion.button>
-
-                        <motion.button
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          onClick={() => setShowSpecs(!showSpecs)}
-                          className='px-6 py-4 border-2 border-black text-black font-semibold rounded-xl hover:bg-black hover:text-white transition-all duration-300 flex items-center justify-center'
-                        >
-                          <Settings className='w-5 h-5 mr-2' />
-                          {showSpecs ? 'Hide Specs' : 'View Specs'}
-                        </motion.button>
                       </div>
 
-                      {/* Product Specifications */}
-                      <AnimatePresence>
-                        {showSpecs && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.5 }}
-                            className='overflow-hidden'
+                      {/* Product Specifications - Accordion */}
+                      <div className='border-t-2 border-black/10 pt-6'>
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5 }}
+                          viewport={{ once: true }}
+                          className='bg-white border-2 border-black/20 rounded-xl overflow-hidden shadow-lg'
+                        >
+                          {/* Accordion Header */}
+                          <button
+                            onClick={() => {
+                              logAccordionState(product.id)
+                              console.log(
+                                `Toggling accordion for product ${product.id}`
+                              )
+
+                              setExpandedSpecs((prev) => {
+                                const newState = { ...prev }
+                                newState[product.id] = !newState[product.id]
+                                console.log('New state after toggle:', newState)
+                                return newState
+                              })
+                            }}
+                            className='w-full p-6 bg-gradient-to-r from-gray-50 to-white hover:from-gray-100 hover:to-gray-50 transition-all duration-300 flex items-center justify-between group relative'
                           >
-                            <div className='border-t-2 border-black/10 pt-6'>
-                              <h4 className='text-xl font-bold text-black mb-4 flex items-center'>
-                                <Settings className='w-5 h-5 mr-2' />
+                            <div className='flex items-center'>
+                              <Settings className='w-6 h-6 mr-3 text-black' />
+                              <h4 className='text-xl font-bold text-black'>
                                 Product Specifications
                               </h4>
-                              <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                                {productSpecifications.map((spec, index) => (
-                                  <motion.div
-                                    key={index}
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{
-                                      duration: 0.3,
-                                      delay: index * 0.05,
-                                    }}
-                                    className='bg-white border border-black/10 rounded-lg p-4 hover:shadow-md transition-shadow duration-300 group cursor-pointer'
-                                    onClick={() => {
-                                      // Here you could add detailed zoom functionality for each spec
-                                      console.log(
-                                        `Zooming into ${spec.category}`
-                                      )
-                                    }}
-                                  >
-                                    <div className='flex items-start justify-between'>
-                                      <div className='flex items-center mb-2'>
-                                        <span className='text-lg mr-2'>
-                                          {spec.icon}
-                                        </span>
-                                        <h5 className='font-semibold text-black text-sm'>
-                                          {spec.category}
-                                        </h5>
-                                      </div>
-                                      <ZoomIn className='w-4 h-4 text-gray-400 group-hover:text-black transition-colors duration-300 opacity-0 group-hover:opacity-100' />
-                                    </div>
-                                    <p className='text-gray-600 text-sm leading-relaxed'>
-                                      {spec.spec}
-                                    </p>
-                                  </motion.div>
-                                ))}
-                              </div>
-                              <div className='mt-6 p-4 bg-black/5 rounded-lg border border-black/10'>
-                                <p className='text-sm text-gray-600 text-center'>
-                                  💡 <strong>Tip:</strong> Click on any
-                                  specification to zoom in and explore detailed
-                                  component information
-                                </p>
+                              <motion.div
+                                animate={{
+                                  y: expandedSpecs[product.id] ? 0 : [0, -3, 0],
+                                }}
+                                transition={{
+                                  duration: 1.5,
+                                  repeat: expandedSpecs[product.id]
+                                    ? 0
+                                    : Infinity,
+                                  ease: 'easeInOut',
+                                }}
+                                className='ml-3 text-black'
+                              >
+                                <svg
+                                  width='20'
+                                  height='20'
+                                  viewBox='0 0 24 24'
+                                  fill='none'
+                                  stroke='currentColor'
+                                  strokeWidth='2'
+                                  strokeLinecap='round'
+                                  strokeLinejoin='round'
+                                >
+                                  <path d='M6 9l6 6 6-6' />
+                                </svg>
+                              </motion.div>
+                            </div>
+                            <div className='flex items-center'>
+                              <span className='mr-2 text-sm text-gray-600 font-medium'>
+                                {expandedSpecs[product.id]
+                                  ? 'Click to hide'
+                                  : 'Click to show'}{' '}
+                                (ID: {product.id})
+                              </span>
+                              <motion.div
+                                animate={{
+                                  rotate: expandedSpecs[product.id] ? 180 : 0,
+                                }}
+                                transition={{ duration: 0.3 }}
+                                className='w-6 h-6 text-black group-hover:scale-110 transition-transform duration-300'
+                              >
+                                <svg
+                                  fill='none'
+                                  stroke='currentColor'
+                                  viewBox='0 0 24 24'
+                                  xmlns='http://www.w3.org/2000/svg'
+                                >
+                                  <path
+                                    strokeLinecap='round'
+                                    strokeLinejoin='round'
+                                    strokeWidth={2}
+                                    d='M19 9l-7 7-7-7'
+                                  />
+                                </svg>
+                              </motion.div>
+
+                              {/* Hand Emoji with Tooltip */}
+                              <div className='ml-4 relative group/tooltip'>
+                                <motion.div
+                                  animate={{
+                                    y: expandedSpecs[product.id]
+                                      ? 0
+                                      : [0, -5, 0],
+                                    scale: expandedSpecs[product.id]
+                                      ? 1
+                                      : [1, 1.1, 1],
+                                  }}
+                                  transition={{
+                                    duration: 1.5,
+                                    repeat: expandedSpecs[product.id]
+                                      ? 0
+                                      : Infinity,
+                                    ease: 'easeInOut',
+                                  }}
+                                  className='text-2xl cursor-pointer'
+                                >
+                                  👆
+                                </motion.div>
+
+                                {/* Tooltip */}
+                                <div className='absolute bottom-full right-0 mb-2 px-3 py-2 bg-black text-white text-sm rounded-lg opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-300 whitespace-nowrap z-20'>
+                                  Click here to open
+                                  <div className='absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-black'></div>
+                                </div>
                               </div>
                             </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
+                          </button>
+
+                          {/* Accordion Content */}
+                          <AnimatePresence>
+                            {expandedSpecs[product.id] && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{
+                                  duration: 0.4,
+                                  ease: 'easeInOut',
+                                }}
+                                className='overflow-hidden'
+                              >
+                                <div className='p-6 bg-white border-t border-black/10'>
+                                  <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-6'>
+                                    {productSpecifications.map(
+                                      (spec, index) => (
+                                        <motion.div
+                                          key={index}
+                                          initial={{ opacity: 0, x: -20 }}
+                                          animate={{ opacity: 1, x: 0 }}
+                                          transition={{
+                                            duration: 0.3,
+                                            delay: index * 0.05,
+                                          }}
+                                          className='bg-gray-50 border border-black/10 rounded-lg p-4 hover:shadow-md transition-all duration-300 group cursor-pointer hover:bg-gray-100'
+                                          onClick={() => {
+                                            // Here you could add detailed zoom functionality for each spec
+                                            console.log(
+                                              `Zooming into ${spec.category}`
+                                            )
+                                          }}
+                                        >
+                                          <div className='flex items-start justify-between mb-3'>
+                                            <div className='flex items-center'>
+                                              <span className='text-xl mr-3'>
+                                                {spec.icon}
+                                              </span>
+                                              <h5 className='font-semibold text-black text-sm'>
+                                                {spec.category}
+                                              </h5>
+                                            </div>
+                                            <ZoomIn className='w-4 h-4 text-gray-400 group-hover:text-black transition-colors duration-300 opacity-0 group-hover:opacity-100' />
+                                          </div>
+                                          <p className='text-gray-600 text-sm leading-relaxed'>
+                                            {spec.spec}
+                                          </p>
+                                        </motion.div>
+                                      )
+                                    )}
+                                  </div>
+
+                                  {/* Additional Details Section */}
+                                  <div className='bg-black/5 rounded-lg p-4 border border-black/10'>
+                                    <h5 className='font-semibold text-black mb-3 flex items-center'>
+                                      <span className='text-lg mr-2'>📋</span>
+                                      Additional Information
+                                    </h5>
+                                    <div className='grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600'>
+                                      <div>
+                                        <p>
+                                          <strong>Warranty:</strong> 1 year
+                                          manufacturer warranty
+                                        </p>
+                                        <p>
+                                          <strong>Assembly:</strong>{' '}
+                                          Professional assembly included
+                                        </p>
+                                        <p>
+                                          <strong>Delivery:</strong> Free
+                                          delivery within city limits
+                                        </p>
+                                      </div>
+                                      <div>
+                                        <p>
+                                          <strong>Maintenance:</strong> First
+                                          service free after 3 months
+                                        </p>
+                                        <p>
+                                          <strong>Support:</strong> 24/7
+                                          customer support available
+                                        </p>
+                                        <p>
+                                          <strong>Returns:</strong> 30-day
+                                          return policy
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div className='mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200'>
+                                    <p className='text-sm text-blue-800 text-center'>
+                                      💡 <strong>Tip:</strong> Click on any
+                                      specification to explore detailed
+                                      component information and technical
+                                      specifications
+                                    </p>
+                                  </div>
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </motion.div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )
-            })()}
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
 
           {/* Products Grid */}
@@ -579,9 +768,16 @@ const Products: React.FC = () => {
               >
                 <X className='w-6 h-6 text-white' />
               </button>
-              <img
-                src={productsImage}
-                alt='Bosco Bike Products Showcase'
+              <video
+                src={
+                  selectedProduct === 'Bosco EBike'
+                    ? ebikeVideo
+                    : pedalBikeVideo
+                }
+                autoPlay
+                loop
+                muted
+                playsInline
                 className='w-full h-auto max-h-[90vh] object-contain rounded-lg shadow-2xl'
               />
             </motion.div>
