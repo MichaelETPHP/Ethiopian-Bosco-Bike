@@ -1,274 +1,321 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
-import aboutPlaceholder from '../assets/logo.png'
+import { ArrowRight, Sparkles, Target, Users, Award } from 'lucide-react'
+import logoMain from '../assets/logo-main.png'
 import bgImage from '../assets/bg.png'
 
-// TikTokEmbed component for official TikTok embed
-const TikTokEmbed: React.FC<{ videoId: string }> = ({ videoId }) => {
-  React.useEffect(() => {
-    const scriptId = 'tiktok-embed-script'
-    if (!document.getElementById(scriptId)) {
-      const script = document.createElement('script')
-      script.id = scriptId
-      script.src = 'https://www.tiktok.com/embed.js'
-      script.async = true
-      document.body.appendChild(script)
-    } else {
-      // If script already exists, reload embeds
-      if ((window as any)['tiktokEmbedLoad'])
-        (window as any)['tiktokEmbedLoad']()
-    }
-  }, [])
-  const embedHtml = `
-    <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@boscobike/video/${videoId}" data-video-id="${videoId}" style="max-width: 605px;min-width: 325px;">
-      <section></section>
-    </blockquote>
-  `
-  return (
-    <div
-      className='w-full aspect-[9/16] overflow-hidden rounded-xl'
-      dangerouslySetInnerHTML={{ __html: embedHtml }}
-    />
-  )
-}
-
 const About: React.FC = () => {
-  // Parallax effect for background
-  const ref = React.useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
-    target: ref,
+    target: containerRef,
     offset: ['start end', 'end start'],
   })
-  const y = useTransform(scrollYProgress, [0, 1], [0, 80]) // Parallax: moves slower than scroll
-  const opacity = useTransform(scrollYProgress, [0, 1], [0.1, 0.1]) // Always 0.1 for subtlety
+
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, -100])
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, 50])
+  const y3 = useTransform(scrollYProgress, [0, 1], [0, -150])
+  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 0])
 
   return (
-    <>
-      <section
-        id='about'
-        className='relative py-20 lg:py-32 bg-white overflow-hidden'
-        ref={ref}
-        style={{
-          backgroundImage:
-            'radial-gradient(circle at 20% 40%, rgba(0,0,0,0.04) 0%, transparent 70%), radial-gradient(circle at 80% 60%, rgba(0,0,0,0.06) 0%, transparent 70%)',
-        }}
-      >
-        {/* Parallax background image */}
+    <section
+      id='about'
+      className='relative py-24 lg:py-32 overflow-hidden'
+      ref={containerRef}
+      style={{
+        background:
+          'linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #f1f5f9 100%)',
+      }}
+    >
+      {/* Futuristic Background Elements */}
+      <div className='absolute inset-0 pointer-events-none'>
+        {/* Floating geometric shapes */}
         <motion.div
-          aria-hidden='true'
-          className='absolute inset-0 w-full h-full z-0 pointer-events-none select-none'
-          style={{
-            background: `url(${bgImage}) top center/cover no-repeat`,
-            opacity,
-            y,
-            filter: 'blur(1.5px)',
-          }}
+          style={{ y: y1 }}
+          className='absolute top-20 left-10 w-32 h-32 opacity-10'
+        >
+          <div className='w-full h-full bg-gradient-to-br from-black/20 to-transparent rounded-full blur-xl' />
+        </motion.div>
+
+        <motion.div
+          style={{ y: y2 }}
+          className='absolute top-40 right-20 w-24 h-24 opacity-8'
+        >
+          <div className='w-full h-full bg-gradient-to-br from-black/15 to-transparent rounded-full blur-lg' />
+        </motion.div>
+
+        <motion.div
+          style={{ y: y3 }}
+          className='absolute bottom-32 left-1/4 w-20 h-20 opacity-6'
+        >
+          <div className='w-full h-full bg-gradient-to-br from-black/10 to-transparent rounded-full blur-md' />
+        </motion.div>
+
+        {/* Glassmorphism orbs */}
+        <motion.div
+          style={{ y: y1 }}
+          className='absolute top-1/3 right-1/3 w-64 h-64 bg-gradient-to-r from-white/30 to-transparent rounded-full blur-3xl backdrop-blur-sm'
         />
-        <div className='container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 max-w-6xl'>
+        <motion.div
+          style={{ y: y2 }}
+          className='absolute bottom-1/4 left-1/3 w-48 h-48 bg-gradient-to-r from-white/20 to-transparent rounded-full blur-2xl backdrop-blur-sm'
+        />
+
+        {/* Animated grid pattern */}
+        <div className='absolute inset-0 opacity-5'>
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width%3D%2260%22 height%3D%2260%22 viewBox%3D%220 0 60 60%22 xmlns%3D%22http://www.w3.org/2000/svg%22%3E%3Cg fill%3D%22none%22 fill-rule%3D%22evenodd%22%3E%3Cg fill%3D%22%23000000%22 fill-opacity%3D%220.1%22%3E%3Ccircle cx%3D%227%22 cy%3D%227%22 r%3D%221%22/%3E%3Ccircle cx%3D%2227%22 cy%3D%227%22 r%3D%221%22/%3E%3Ccircle cx%3D%2247%22 cy%3D%227%22 r%3D%221%22/%3E%3Ccircle cx%3D%227%22 cy%3D%2227%22 r%3D%221%22/%3E%3Ccircle cx%3D%2227%22 cy%3D%2227%22 r%3D%221%22/%3E%3Ccircle cx%3D%2247%22 cy%3D%2227%22 r%3D%221%22/%3E%3Ccircle cx%3D%227%22 cy%3D%2247%22 r%3D%221%22/%3E%3Ccircle cx%3D%2227%22 cy%3D%2247%22 r%3D%221%22/%3E%3Ccircle cx%3D%2247%22 cy%3D%2247%22 r%3D%221%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] animate-pulse" />
+        </div>
+      </div>
+
+      {/* Main Content Container */}
+      <div className='relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl'>
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center'>
+          {/* Left Side - Image with Futuristic Elements */}
           <motion.div
-            className='flex flex-col lg:flex-row items-center gap-8 lg:gap-16 max-w-5xl mx-auto'
-            initial='hidden'
-            whileInView='visible'
-            viewport={{ once: true, amount: 0.4 }}
-            variants={{
-              hidden: {},
-              visible: {
-                transition: {
-                  staggerChildren: 0.18,
-                },
-              },
-            }}
+            initial={{ opacity: 0, x: -60 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
+            viewport={{ once: true, amount: 0.3 }}
+            className='relative'
           >
-            {/* Left: Image/Logo */}
-            <motion.div
-              className='w-full lg:w-1/2 flex justify-center items-center mb-8 lg:mb-0'
-              initial={{ opacity: 0, x: -60, scale: 0.95 }}
-              animate={{}}
-              whileInView={{ opacity: 1, x: 0, scale: 1 }}
-              transition={{ duration: 0.8, ease: 'easeOut' }}
-              viewport={{ once: true, amount: 0.3 }}
-            >
-              <motion.img
-                src={aboutPlaceholder}
-                alt='Company logo or branding image'
-                className='rounded-3xl shadow-2xl object-contain w-64 h-64 sm:w-80 sm:h-80 lg:w-[380px] lg:h-[380px] max-w-full border border-black/10 bg-white/80 transition-transform duration-300 hover:scale-105 hover:shadow-[0_12px_48px_0_rgba(0,0,0,0.18)]'
-                whileHover={{ scale: 1.06 }}
-                initial={false}
-                animate={false}
+            {/* Glassmorphism container */}
+            <div className='relative bg-white/20 backdrop-blur-xl rounded-3xl p-8 border border-white/30 shadow-2xl'>
+              {/* Animated background elements */}
+              <motion.div
+                animate={{
+                  rotate: [0, 360],
+                }}
+                transition={{
+                  duration: 20,
+                  repeat: Infinity,
+                  ease: 'linear',
+                }}
+                className='absolute -top-4 -left-4 w-8 h-8 bg-gradient-to-r from-black/20 to-transparent rounded-full blur-sm'
               />
-            </motion.div>
-            {/* Right: Text Content */}
-            <motion.div
-              className='w-full lg:w-1/2 bg-white/95 rounded-3xl p-8 lg:p-12 shadow-xl border border-black/5 flex flex-col justify-center'
-              style={{ fontFamily: 'Inter, ui-sans-serif, serif' }}
-              initial={{ opacity: 0, x: 60, scale: 0.98 }}
-              animate={{}}
-              whileInView={{ opacity: 1, x: 0, scale: 1 }}
-              transition={{ duration: 0.9, ease: 'easeOut' }}
-              viewport={{ once: true, amount: 0.3 }}
-            >
-              <h2 className='text-3xl sm:text-4xl lg:text-5xl font-serif font-extrabold text-black mb-4 tracking-tight'>
-                About Bosco Bike
-              </h2>
-              <div className='w-16 h-1 bg-black rounded-full mb-6' />
-              <p className='text-lg sm:text-xl text-black leading-relaxed mb-6 font-medium'>
-                We are passionate about sustainable transportation and bringing
-                you the best in electric mobility solutions. Our commitment to
-                innovation, quality, and environmental responsibility drives
+
+              <motion.div
+                animate={{
+                  rotate: [360, 0],
+                }}
+                transition={{
+                  duration: 15,
+                  repeat: Infinity,
+                  ease: 'linear',
+                }}
+                className='absolute -bottom-4 -right-4 w-6 h-6 bg-gradient-to-r from-black/15 to-transparent rounded-full blur-sm'
+              />
+
+              {/* Main image container */}
+              <div className='relative z-10'>
+                <motion.div
+                  className='relative group cursor-pointer'
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {/* Image with glassmorphism border */}
+                  <div className='relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/40 to-white/20 backdrop-blur-sm border border-white/50 shadow-xl'>
+                    <img
+                      src={logoMain}
+                      alt='Bosco Bike Logo'
+                      className='w-full h-auto object-contain p-8 transition-transform duration-700 group-hover:scale-105'
+                    />
+
+                    {/* Hover overlay */}
+                    <div className='absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
+
+                    {/* Sparkle effect on hover */}
+                    <motion.div
+                      className='absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300'
+                      animate={{
+                        scale: [1, 1.2, 1],
+                        rotate: [0, 180, 360],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                      }}
+                    >
+                      <Sparkles className='w-6 h-6 text-white' />
+                    </motion.div>
+                  </div>
+
+                  {/* Floating stats cards */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.3 }}
+                    viewport={{ once: true }}
+                    className='absolute -top-4 -right-4 bg-white/90 backdrop-blur-md rounded-xl p-3 shadow-lg border border-white/50'
+                  >
+                    <div className='flex items-center space-x-2'>
+                      <Award className='w-4 h-4 text-black' />
+                      <span className='text-sm font-semibold text-black'>
+                        Premium Quality
+                      </span>
+                    </div>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.5 }}
+                    viewport={{ once: true }}
+                    className='absolute -bottom-4 -left-4 bg-white/90 backdrop-blur-md rounded-xl p-3 shadow-lg border border-white/50'
+                  >
+                    <div className='flex items-center space-x-2'>
+                      <Users className='w-4 h-4 text-black' />
+                      <span className='text-sm font-semibold text-black'>
+                        Trusted by 1000+
+                      </span>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Right Side - Content */}
+          <motion.div
+            initial={{ opacity: 0, x: 60 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
+            viewport={{ once: true, amount: 0.3 }}
+            className='relative'
+          >
+            {/* Glassmorphism content container */}
+            <div className='bg-white/30 backdrop-blur-xl rounded-3xl p-8 lg:p-12 border border-white/30 shadow-2xl'>
+              {/* Badge */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                viewport={{ once: true }}
+                className='inline-flex items-center px-4 py-2 bg-black/10 backdrop-blur-sm text-black text-sm font-semibold rounded-full border border-black/20 mb-6'
+              >
+                <Target className='w-4 h-4 mr-2' />
+                Our Mission
+              </motion.div>
+
+              {/* Headline */}
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                viewport={{ once: true }}
+                className='text-4xl sm:text-5xl lg:text-6xl font-bold text-black mb-6 leading-tight'
+              >
+                Ride Smart.
+                <span className='block bg-gradient-to-r from-black via-gray-700 to-black bg-clip-text text-transparent'>
+                  Ride Green.
+                </span>
+              </motion.h2>
+
+              {/* Divider */}
+              <motion.div
+                initial={{ opacity: 0, scaleX: 0 }}
+                whileInView={{ opacity: 1, scaleX: 1 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                viewport={{ once: true }}
+                className='w-20 h-1 bg-gradient-to-r from-black to-gray-600 rounded-full mb-8'
+              />
+
+              {/* Mission Statement */}
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+                viewport={{ once: true }}
+                className='text-lg sm:text-xl text-gray-700 leading-relaxed mb-8 font-medium'
+              >
+                We are passionate about revolutionizing urban transportation
+                through cutting-edge electric mobility solutions. Our commitment
+                to innovation, quality, and environmental responsibility drives
                 everything we do.
-              </p>
-              <p className='text-base sm:text-lg text-gray-700 leading-relaxed mb-2'>
+              </motion.p>
+
+              {/* Story */}
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
+                viewport={{ once: true }}
+                className='text-base sm:text-lg text-gray-600 leading-relaxed mb-8'
+              >
                 Every bike and scooter we offer is carefully selected for its
                 performance, durability, and environmental impact. Join us in
                 creating a cleaner, more efficient world through premium
-                electric mobility.
-              </p>
-              <div className='mt-6'>
-                <span className='block text-sm text-gray-600 font-semibold'>
-                  Our Mission
-                </span>
-                <span className='block text-base text-black'>
-                  Empowering communities with innovative, eco-friendly mobility
-                  solutions.
-                </span>
-              </div>
-              <div className='mt-2'>
-                <span className='block text-sm text-gray-600 font-semibold'>
-                  Our Vision
-                </span>
-                <span className='block text-base text-black'>
-                  To lead the way in sustainable transportation for a cleaner,
-                  brighter future.
-                </span>
-              </div>
-              <div className='my-6 border-t border-gray-200' />
-              <div className='flex items-center justify-center gap-6 mt-2'>
-                {/* Facebook */}
-                <a
-                  href='https://facebook.com'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  aria-label='Facebook'
-                  className='text-black hover:text-gray-600 transition-colors duration-200'
+                electric mobility that doesn't compromise on style or
+                functionality.
+              </motion.p>
+
+              {/* Key Features */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.7 }}
+                viewport={{ once: true }}
+                className='grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8'
+              >
+                <div className='flex items-center space-x-3'>
+                  <div className='w-2 h-2 bg-black rounded-full' />
+                  <span className='text-sm font-medium text-gray-700'>
+                    Premium Quality Components
+                  </span>
+                </div>
+                <div className='flex items-center space-x-3'>
+                  <div className='w-2 h-2 bg-black rounded-full' />
+                  <span className='text-sm font-medium text-gray-700'>
+                    Eco-Friendly Technology
+                  </span>
+                </div>
+                <div className='flex items-center space-x-3'>
+                  <div className='w-2 h-2 bg-black rounded-full' />
+                  <span className='text-sm font-medium text-gray-700'>
+                    24/7 Customer Support
+                  </span>
+                </div>
+                <div className='flex items-center space-x-3'>
+                  <div className='w-2 h-2 bg-black rounded-full' />
+                  <span className='text-sm font-medium text-gray-700'>
+                    Innovative Design
+                  </span>
+                </div>
+              </motion.div>
+
+              {/* CTA Button */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.8 }}
+                viewport={{ once: true }}
+                className='flex flex-col sm:flex-row gap-4'
+              >
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className='group bg-black hover:bg-gray-800 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center'
+                  onClick={() => {
+                    const el = document.getElementById('products')
+                    if (el) el.scrollIntoView({ behavior: 'smooth' })
+                  }}
                 >
-                  <svg
-                    width='28'
-                    height='28'
-                    fill='currentColor'
-                    viewBox='0 0 24 24'
-                    aria-hidden='true'
-                  >
-                    <path d='M22.675 0h-21.35C.595 0 0 .592 0 1.326v21.348C0 23.406.595 24 1.325 24h11.495v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.797.143v3.24l-1.918.001c-1.504 0-1.797.715-1.797 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116C23.406 24 24 23.406 24 22.674V1.326C24 .592 23.406 0 22.675 0' />
-                  </svg>
-                </a>
-                {/* Twitter */}
-                <a
-                  href='https://twitter.com'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  aria-label='Twitter'
-                  className='text-black hover:text-gray-600 transition-colors duration-200'
+                  Explore Our Products
+                  <ArrowRight className='w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300' />
+                </motion.button>
+
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className='px-8 py-4 border-2 border-black text-black font-semibold rounded-xl hover:bg-black hover:text-white transition-all duration-300 flex items-center justify-center'
                 >
-                  <svg
-                    width='28'
-                    height='28'
-                    fill='currentColor'
-                    viewBox='0 0 24 24'
-                    aria-hidden='true'
-                  >
-                    <path d='M24 4.557a9.83 9.83 0 0 1-2.828.775 4.932 4.932 0 0 0 2.165-2.724c-.951.564-2.005.974-3.127 1.195A4.916 4.916 0 0 0 16.616 3c-2.717 0-4.92 2.206-4.92 4.924 0 .386.045.763.127 1.124C7.728 8.807 4.1 6.884 1.671 3.965c-.423.722-.666 1.561-.666 2.475 0 1.708.87 3.216 2.188 4.099a4.904 4.904 0 0 1-2.229-.616c-.054 2.281 1.581 4.415 3.949 4.89a4.936 4.936 0 0 1-2.224.084c.627 1.956 2.444 3.377 4.6 3.417A9.867 9.867 0 0 1 0 21.543a13.94 13.94 0 0 0 7.548 2.212c9.057 0 14.009-7.496 14.009-13.986 0-.21 0-.423-.016-.634A9.936 9.936 0 0 0 24 4.557z' />
-                  </svg>
-                </a>
-                {/* Instagram */}
-                <a
-                  href='https://instagram.com'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  aria-label='Instagram'
-                  className='text-black hover:text-gray-600 transition-colors duration-200'
-                >
-                  <svg
-                    width='28'
-                    height='28'
-                    fill='currentColor'
-                    viewBox='0 0 24 24'
-                    aria-hidden='true'
-                  >
-                    <path d='M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.334 3.608 1.308.974.974 1.246 2.241 1.308 3.608.058 1.266.069 1.646.069 4.85s-.012 3.584-.07 4.85c-.062 1.366-.334 2.633-1.308 3.608-.974.974-2.241 1.246-3.608 1.308-1.266.058-1.646.069-4.85.069s-3.584-.012-4.85-.07c-1.366-.062-2.633-.334-3.608-1.308-.974-.974-1.246-2.241-1.308-3.608C2.175 15.647 2.163 15.267 2.163 12s.012-3.584.07-4.85c.062-1.366.334-2.633 1.308-3.608.974-.974 2.241-1.246 3.608-1.308C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.014 7.052.072 5.775.13 4.602.402 3.635 1.37 2.668 2.338 2.396 3.511 2.338 4.788.014 8.332 0 8.741 0 12c0 3.259.014 3.668.072 4.948.058 1.277.33 2.45 1.298 3.418.968.968 2.141 1.24 3.418 1.298C8.332 23.986 8.741 24 12 24s3.668-.014 4.948-.072c1.277-.058 2.45-.33 3.418-1.298.968-.968 1.24-2.141 1.298-3.418.058-1.28.072-1.689.072-4.948 0-3.259-.014-3.668-.072-4.948-.058-1.277-.33-2.45-1.298-3.418-.968-.968-2.141-1.24-3.418-1.298C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a3.999 3.999 0 1 1 0-7.998 3.999 3.999 0 0 1 0 7.998zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z' />
-                  </svg>
-                </a>
-                {/* LinkedIn */}
-                <a
-                  href='https://linkedin.com'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  aria-label='LinkedIn'
-                  className='text-black hover:text-gray-600 transition-colors duration-200'
-                >
-                  <svg
-                    width='28'
-                    height='28'
-                    fill='currentColor'
-                    viewBox='0 0 24 24'
-                    aria-hidden='true'
-                  >
-                    <path d='M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.761 0 5-2.239 5-5v-14c0-2.761-2.239-5-5-5zm-11.75 20h-3v-10h3v10zm-1.5-11.268c-.966 0-1.75-.784-1.75-1.75s.784-1.75 1.75-1.75 1.75.784 1.75 1.75-.784 1.75-1.75 1.75zm15.25 11.268h-3v-5.604c0-1.337-.025-3.063-1.868-3.063-1.868 0-2.154 1.459-2.154 2.968v5.699h-3v-10h2.881v1.367h.041c.401-.761 1.379-1.563 2.841-1.563 3.039 0 3.6 2.001 3.6 4.601v5.595z' />
-                  </svg>
-                </a>
-              </div>
-            </motion.div>
+                  Learn More
+                </motion.button>
+              </motion.div>
+            </div>
           </motion.div>
         </div>
-      </section>
-      {/* TikTok Highlights Section */}
-      <section className='relative py-16 bg-white/95'>
-        <div className='container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl'>
-          <h3 className='text-2xl sm:text-3xl font-bold text-black mb-8 text-center font-serif'>
-            Our TikTok Highlights
-          </h3>
-          <div className='flex flex-wrap justify-center gap-8'>
-            {/* TikTok Video Card 1 - Official Embed */}
-            <div className='relative bg-white/60 backdrop-blur-md border border-gray-200 rounded-3xl shadow-xl p-4 flex flex-col items-center hover:scale-105 hover:shadow-2xl transition-all duration-300 max-w-xs w-80 mx-auto group overflow-hidden'>
-              {/* Gradient overlay for glassmorphism */}
-              <div
-                className='absolute inset-0 rounded-3xl pointer-events-none z-0'
-                style={{
-                  background:
-                    'linear-gradient(135deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.10) 100%)',
-                }}
-              />
-              <div className='relative z-10 w-full aspect-[9/16] overflow-hidden rounded-2xl mb-2'>
-                <TikTokEmbed videoId='7524561960344636678' />
-              </div>
-            </div>
-            <div className='relative bg-white/60 backdrop-blur-md border border-gray-200 rounded-3xl shadow-xl p-4 flex flex-col items-center hover:scale-105 hover:shadow-2xl transition-all duration-300 max-w-xs w-80 mx-auto group overflow-hidden'>
-              <div
-                className='absolute inset-0 rounded-3xl pointer-events-none z-0'
-                style={{
-                  background:
-                    'linear-gradient(135deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.10) 100%)',
-                }}
-              />
-              <div className='relative z-10 w-full aspect-[9/16] overflow-hidden rounded-2xl mb-2'>
-                <TikTokEmbed videoId='7524561960344636679' />
-              </div>
-            </div>
-            <div className='relative bg-white/60 backdrop-blur-md border border-gray-200 rounded-3xl shadow-xl p-4 flex flex-col items-center hover:scale-105 hover:shadow-2xl transition-all duration-300 max-w-xs w-80 mx-auto group overflow-hidden'>
-              <div
-                className='absolute inset-0 rounded-3xl pointer-events-none z-0'
-                style={{
-                  background:
-                    'linear-gradient(135deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.10) 100%)',
-                }}
-              />
-              <div className='relative z-10 w-full aspect-[9/16] overflow-hidden rounded-2xl mb-2'>
-                <TikTokEmbed videoId='7524561960344636680' />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </>
+      </div>
+    </section>
   )
 }
 

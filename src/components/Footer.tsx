@@ -6,10 +6,12 @@ import {
   Twitter,
   ChevronUp,
   MessageCircle,
+  Heart,
 } from 'lucide-react'
 
 const Footer: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false)
+  const currentYear = new Date().getFullYear()
 
   useEffect(() => {
     // Show the WhatsApp button after a short delay
@@ -97,7 +99,7 @@ const Footer: React.FC = () => {
               <Facebook className='w-5 h-5 text-black' />
             </a>
             <a
-              href='https://instagram.com'
+              href='https://instagram.com/michael_t_design'
               target='_blank'
               rel='noopener noreferrer'
               className='w-12 h-12 bg-white hover:bg-gray-200 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110'
@@ -115,9 +117,26 @@ const Footer: React.FC = () => {
           </div>
 
           {/* Copyright */}
-          <p className='text-gray-300'>
-            © 2024 Bosco Bike. All rights reserved.
+          <p className='text-gray-300 mb-4'>
+            © {currentYear} Bosco Bike. All rights reserved.
           </p>
+
+          {/* Developer Section */}
+          <div className='border-t border-gray-800 pt-6'>
+            <p className='text-gray-400 text-sm flex items-center justify-center space-x-2'>
+              <span>Designed with</span>
+              <Heart className='w-4 h-4 text-red-500 fill-current animate-pulse' />
+              <span>by</span>
+              <a
+                href='https://instagram.com/michael_t_design'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='text-white hover:text-gray-300 font-semibold transition-colors duration-300 underline'
+              >
+                Michael T
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </footer>

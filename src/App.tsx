@@ -1,6 +1,7 @@
 import React from 'react'
 import Header from './components/Header'
 import Hero from './components/Hero'
+// import SplitVideoSection from './components/SplitVideoSection'
 import About from './components/About'
 import Products from './components/Products'
 import Contact from './components/Contact'
@@ -11,6 +12,7 @@ function App() {
     <div className='App'>
       <Header />
       <Hero />
+      {/* <SplitVideoSection /> */}
       <About />
       <Products />
       <Contact />

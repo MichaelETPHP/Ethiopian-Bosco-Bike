@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { X, MapPin, Phone, Clock } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 interface BuyNowModalProps {
   productName: string
@@ -78,8 +79,6 @@ const BuyNowModal: React.FC<BuyNowModalProps> = ({ productName, onClose }) => {
                 <p className='text-gray-600'>
                   <strong>Dayot General Business Plc</strong>
                   <br />
-                  +251 931 199 939
-                  <br />
                   +251 710 790 707
                 </p>
               </div>
@@ -104,12 +103,27 @@ const BuyNowModal: React.FC<BuyNowModalProps> = ({ productName, onClose }) => {
 
           {/* Action Buttons */}
           <div className='flex flex-col sm:flex-row gap-3 pt-4'>
-            <a
+            <motion.a
               href='tel:+251931199939'
-              className='flex-1 bg-black hover:bg-gray-800 text-white py-3 px-6 rounded-xl font-semibold text-center transition-all duration-300 transform hover:scale-105'
+              className='flex-1 bg-black hover:bg-gray-800 text-white py-3 px-6 rounded-xl font-semibold text-center transition-all duration-300 transform hover:scale-105 flex items-center justify-center'
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              Call +251 931 199 939
-            </a>
+              <motion.div
+                animate={{
+                  rotate: [0, -10, 10, -10, 0],
+                }}
+                transition={{
+                  duration: 0.5,
+                  repeat: Infinity,
+                  repeatDelay: 2,
+                }}
+                className='mr-2'
+              >
+                <Phone className='w-5 h-5' />
+              </motion.div>
+              Call Now
+            </motion.a>
             <button
               onClick={onClose}
               className='flex-1 border-2 border-gray-200 hover:border-gray-300 text-black py-3 px-6 rounded-xl font-semibold transition-all duration-300'

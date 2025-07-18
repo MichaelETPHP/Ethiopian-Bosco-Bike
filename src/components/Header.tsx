@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Menu, X, Zap } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import logoMain from '../assets/logo-main.png'
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -15,11 +16,21 @@ const Header: React.FC = () => {
   }, [])
 
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
-      setIsMenuOpen(false)
+    if (sectionId === 'hero') {
+      // Scroll to top of the page for Home
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      // Scroll to specific section
+      const element = document.getElementById(sectionId)
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' })
+      }
     }
+    setIsMenuOpen(false)
+  }
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return (
@@ -35,10 +46,17 @@ const Header: React.FC = () => {
       }}
     >
       <div className='px-4 sm:px-8 py-2 flex items-center justify-between'>
-        {/* Logo Area */}
-        <div className='flex items-center space-x-3 select-none'>
-          <div className='w-10 h-10 bg-gradient-to-r from-white to-slate-300 rounded-xl flex items-center justify-center shadow-md border border-slate-300'>
-            <Zap className='w-6 h-6 text-black' />
+        {/* Logo Area - Clickable to go to top */}
+        <div
+          className='flex items-center space-x-3 select-none cursor-pointer'
+          onClick={scrollToTop}
+        >
+          <div className='w-16 h-16 flex items-center justify-center rounded-full border border-white/30'>
+            <img
+              src={logoMain}
+              alt='Bosco Bike Logo'
+              className='w-full h-full object-cover rounded-full'
+            />
           </div>
           <span
             className={`text-2xl font-extrabold tracking-widest uppercase transition-colors duration-300 ${

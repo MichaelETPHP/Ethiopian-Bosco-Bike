@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowDown, Zap, Wind } from 'lucide-react'
+import video1 from '../assets/Products/1.mp4'
+import video2 from '../assets/Products/2.mp4'
 
 const ModernHeroSection: React.FC = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -35,7 +37,7 @@ const ModernHeroSection: React.FC = () => {
             loop
             muted
             playsInline
-            poster='https://press.et/herald/wp-content/uploads/2024/07/3-3.png'
+            // poster='https://press.et/herald/wp-content/uploads/2024/07/3-3.png'
             style={{ objectFit: 'cover', minWidth: '100%', minHeight: '100%' }}
           />
           {/* Color video overlay, only visible at bottom with gradient fade */}
@@ -71,6 +73,48 @@ const ModernHeroSection: React.FC = () => {
         </div>
         {/* Stronger black overlay for readability */}
         <div className='absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/40 pointer-events-none' />
+      </div>
+
+      {/* Left Side Video Overlay */}
+      <div className='absolute left-0 top-0 w-1/3 h-full z-0'>
+        <div className='relative w-full h-full'>
+          <video
+            className='w-full h-full object-cover'
+            src={video1}
+            autoPlay
+            loop
+            muted
+            playsInline
+            style={{ objectFit: 'cover' }}
+            onLoadedMetadata={(e) => {
+              const video = e.target as HTMLVideoElement
+              video.playbackRate = 0.1 // Maximum slow motion - 10% speed
+            }}
+          />
+          {/* Gradient overlay for left video */}
+          <div className='absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent pointer-events-none' />
+        </div>
+      </div>
+
+      {/* Right Side Video Overlay */}
+      <div className='absolute right-0 top-0 w-1/3 h-full z-0'>
+        <div className='relative w-full h-full'>
+          <video
+            className='w-full h-full object-cover'
+            src={video2}
+            autoPlay
+            loop
+            muted
+            playsInline
+            style={{ objectFit: 'cover' }}
+            onLoadedMetadata={(e) => {
+              const video = e.target as HTMLVideoElement
+              video.playbackRate = 0.1 // Maximum slow motion - 10% speed
+            }}
+          />
+          {/* Gradient overlay for right video */}
+          <div className='absolute inset-0 bg-gradient-to-l from-black/60 via-black/30 to-transparent pointer-events-none' />
+        </div>
       </div>
 
       {/* Animated Background Texture (white dots, subtle) */}
@@ -117,8 +161,8 @@ const ModernHeroSection: React.FC = () => {
         <Wind className='w-24 h-24' />
       </motion.div>
 
-      {/* Main Content */}
-      <div className='relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto'>
+      {/* Main Content - Centered */}
+      <div className='relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto'>
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
