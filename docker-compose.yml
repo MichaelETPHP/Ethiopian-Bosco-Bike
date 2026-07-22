@@ -26,8 +26,8 @@ services:
       - no-new-privileges:true
     read_only: true
     tmpfs:
-      - /var/cache/nginx
-      - /var/run
+      - /var/cache/nginx:mode=1777
+      - /var/run:mode=1777
     logging:
       driver: json-file
       options:
