@@ -23,7 +23,10 @@ services:
         max-file: "3"
 
   caddy:
-    image: caddy:2-alpine
+    build:
+      context: ./docker
+      dockerfile: Dockerfile.caddy
+    image: bosco-bike-caddy:latest
     container_name: bosco-bike-caddy
     restart: unless-stopped
     depends_on:
@@ -35,7 +38,6 @@ services:
     environment:
       ACME_EMAIL: ${ACME_EMAIL:-admin@boscobicycle.com}
     volumes:
-      - ./docker/Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
       - caddy_config:/config
       - caddy_logs:/var/log/caddy
