@@ -1,0 +1,69 @@
+# Standalone VPS deployment (no Coolify / no existing reverse proxy on the host).
+# Bundles Caddy for automatic Let's Encrypt HTTPS on boscobicycle.com.
+#
+# Usage:
+#   docker compose -f docker-compose.standalone.yml up -d --build
+#
+# Requires ports 80 and 443 to be free on the host.
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: bosco-bike-web:latest
+    container_name: bosco-bike-app
+    restart: unless-stopped
+    expose:
+      - "8080"
+    networks:
+      - web
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx
+      - /var/run
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  caddy:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile.caddy
+    image: bosco-bike-caddy:latest
+    container_name: bosco-bike-caddy
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      ACME_EMAIL: ${ACME_EMAIL:-admin@boscobicycle.com}
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+      - caddy_logs:/var/log/caddy
+    networks:
+      - web
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  web:
+    driver: bridge
+
+volumes:
+  caddy_data:
+  caddy_config:
+  caddy_logs:

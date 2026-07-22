@@ -1,15 +1,27 @@
+# Coolify deployment.
+#
+# Coolify runs its own reverse proxy (Traefik) on ports 80/443 shared across
+# every app it manages, so this file intentionally does NOT bind any host
+# ports or run its own reverse proxy/Caddy — doing so caused
+# "port is already allocated" failures.
+#
+# After deploying, set the domain in the Coolify dashboard for this service
+# ("app" service -> Domains -> boscobicycle.com, www.boscobicycle.com),
+# port 8080. Coolify auto-generates the Traefik labels and Let's Encrypt
+# certificate for you; it picks whatever internal routing it needs, so
+# there's nothing to configure here.
+#
+# Deploying to a plain VPS without Coolify? Use docker-compose.standalone.yml
+# instead, which bundles Caddy for automatic HTTPS.
+
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
-    image: bosco-bike-web:latest
-    container_name: bosco-bike-app
     restart: unless-stopped
     expose:
       - "8080"
-    networks:
-      - web
     security_opt:
       - no-new-privileges:true
     read_only: true
@@ -21,41 +33,3 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
-
-  caddy:
-    build:
-      context: ./docker
-      dockerfile: Dockerfile.caddy
-    image: bosco-bike-caddy:latest
-    container_name: bosco-bike-caddy
-    restart: unless-stopped
-    depends_on:
-      - app
-    ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
-    environment:
-      ACME_EMAIL: ${ACME_EMAIL:-admin@boscobicycle.com}
-    volumes:
-      - caddy_data:/data
-      - caddy_config:/config
-      - caddy_logs:/var/log/caddy
-    networks:
-      - web
-    security_opt:
-      - no-new-privileges:true
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
-
-networks:
-  web:
-    driver: bridge
-
-volumes:
-  caddy_data:
-  caddy_config:
-  caddy_logs:
