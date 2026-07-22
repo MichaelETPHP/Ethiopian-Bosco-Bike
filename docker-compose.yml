@@ -7,7 +7,7 @@
 #
 # After deploying, set the domain in the Coolify dashboard for this service
 # ("app" service -> Domains -> boscobicycle.com, www.boscobicycle.com),
-# port 8080. Coolify auto-generates the Traefik labels and Let's Encrypt
+# port 4095. Coolify auto-generates the Traefik labels and Let's Encrypt
 # certificate for you; it picks whatever internal routing it needs, so
 # there's nothing to configure here.
 #
@@ -21,7 +21,7 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     expose:
-      - "8080"
+      - "4095"
     security_opt:
       - no-new-privileges:true
     read_only: true

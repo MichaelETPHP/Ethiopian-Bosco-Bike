@@ -15,7 +15,7 @@ services:
     container_name: bosco-bike-app
     restart: unless-stopped
     expose:
-      - "8080"
+      - "4095"
     networks:
       - web
     security_opt:
