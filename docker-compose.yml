@@ -20,6 +20,8 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
+    environment:
+      SERVICE_FQDN_APP_4095: https://boscobicycle.com
     expose:
       - "4095"
     security_opt:
