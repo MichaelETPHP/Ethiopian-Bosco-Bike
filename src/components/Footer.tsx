@@ -132,7 +132,7 @@ const Footer: React.FC = () => {
               <Heart className='w-4 h-4 text-red-500 fill-current animate-pulse' />
               <span>by</span>
               <a
-                href='https://instagram.com/michael_t_design'
+                href='https://www.linkedin.com/in/miko-t/'
                 target='_blank'
                 rel='noopener noreferrer'
                 className='text-white hover:text-gray-300 font-semibold transition-colors duration-300 underline'
